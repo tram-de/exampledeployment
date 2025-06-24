@@ -30,5 +30,5 @@ runs:
       with:
         context: ${{ inputs.context }}
         push: true
-        tags: exampledeployment/backend:latest
+        tags: ghcr.io/exampledeployment/backend:latest
 
