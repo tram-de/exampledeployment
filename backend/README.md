@@ -8,6 +8,6 @@
 ## Run as Docker Container
 - Build the container using `docker build` command
 - Run using `docker run` command
-- Use `docker compose build` to build the container images
+- Use `docker compose build` to build all the container images
 - Use `docker compose up` to build local environment
 - Use `docker compose down` to destroy local environment

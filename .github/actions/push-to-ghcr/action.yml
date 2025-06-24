@@ -5,6 +5,9 @@ inputs:
   context:
     description: 'Build context (directory to build from)'
     required: true
+  image_name:
+    description: 'Name of the Docker image'
+    required: true
   username:
     description: 'GitHub username'
     required: true
@@ -30,5 +33,5 @@ runs:
       with:
         context: ${{ inputs.context }}
         push: true
-        tags: ghcr.io/exampledeployment/backend:latest
+        tags: ghcr.io/${{ github.repository_owner }}/${{ inputs.image_name }}:latest
 

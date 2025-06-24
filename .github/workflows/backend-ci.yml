@@ -26,3 +26,4 @@ jobs:
           context: ./backend
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          image_name: todo-backend
