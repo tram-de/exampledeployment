@@ -5,6 +5,12 @@ inputs:
   context:
     description: 'Build context (directory to build from)'
     required: true
+  username:
+    description: 'GitHub username'
+    required: true
+  password:
+    description: 'GitHub token'
+    required: true
 
 runs: 
   using: composite
@@ -15,9 +21,9 @@ runs:
       with:
         registry: ghcr.io
         # This is the GitHub username of the user who triggered the workflow
-        username: ${{ github.actor }}
+        username: ${{ inputs.username }}
         # This is the GitHub token that has permissions to push to the registry
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ inputs.password }}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
