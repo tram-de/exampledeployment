@@ -15,5 +15,4 @@
 
 ## Release process
 ### backend
-### frontend
 
