@@ -14,5 +14,6 @@
 - Use `docker compose down` to destroy local environment
 
 ## Release process
-- 
+### backend
+### frontend 
 
