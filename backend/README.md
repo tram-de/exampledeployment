@@ -10,3 +10,4 @@
 - Run using `docker run` command
 - Use `docker compose build` to build the container images
 - Use `docker compose up` to build local environment
+- Use `docker compose down`
