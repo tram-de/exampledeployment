@@ -8,3 +8,4 @@
 ## Run as Docker Container
 - Build the container using `docker build` command
 - Run using `docker run` command
+- Use `docker compose build` to build the container images
