@@ -24,3 +24,5 @@ jobs:
         id: push-backend-app-ghcr
         with:
           context: ./backend
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
