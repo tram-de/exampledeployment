@@ -1,0 +1,29 @@
+name: Build and Push Backend Docker to GitHub Container Registry
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'  
+
+jobs:
+  build-and-push-frontend:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and push frontend Docker image
+        uses: ./.github/actions/push-to-ghcr
+        id: push-frontend-app-ghcr
+        with:
+          context: ./frontend
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          image_name: todo-frontend
