@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'backend/**/*.py'
+      - 'backend/README.md'
 
 jobs:
   quality-and-security:
