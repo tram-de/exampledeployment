@@ -28,10 +28,24 @@ runs:
         # This is the GitHub token that has permissions to push to the registry
         password: ${{ inputs.password }}
 
-    - name: Build and push Docker image
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ${{ inputs.context }}
+        push: false
+        tags: ghcr.io/${{ github.repository_owner }}/${{ inputs.image_name }}:latest
+
+    - name: Scan Docker image for vulnerabilities
+      uses: aquasecurity/trivy-action@v0.19.0
+      with:
+        image-ref: ghcr.io/${{ github.repository_owner }}/${{ inputs.image_name }}:latest
+        format: table
+        exit-code: 1
+        ignore-unfixed: true
+
+    - name: Push Docker image
       uses: docker/build-push-action@v5
       with:
         context: ${{ inputs.context }}
         push: true
         tags: ghcr.io/${{ github.repository_owner }}/${{ inputs.image_name }}:latest
-
