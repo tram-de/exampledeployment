@@ -13,3 +13,6 @@
 - Use `docker compose up` to build local environment
 - Use `docker compose down` to destroy local environment
 
+## Release process
+- 
+
