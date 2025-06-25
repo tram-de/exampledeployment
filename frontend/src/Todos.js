@@ -19,7 +19,7 @@ export default function Todos() {
   const [error, setError] = useState(null);
   const [showStatus, setShowStatus] = useState(null);
 
-  const baseUrl = "http://localhost:8000";
+  const baseUrl = "http://todo-backend.backend.local:8000";
   function getTasks() {
     console.log("Get Task List")    
     axios({
