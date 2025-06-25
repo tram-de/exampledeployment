@@ -1,0 +1,31 @@
+name: Frontend Code Quality and Security
+
+on:
+  pull_request:
+    paths:
+      - 'frontend/src/**/*.js'
+
+jobs:
+  quality-and-security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Lint with ESLint
+        working-directory: ./frontend
+        run: npm run lint || npx eslint src
+
+      - name: Run tests
+        working-directory: ./frontend
+        run: npm test -- --watchAll=false
