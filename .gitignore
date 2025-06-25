@@ -1,2 +1,5 @@
 # VS Code settings
 .vscode/
+
+# terraform cache
+.terraform/
