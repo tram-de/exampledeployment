@@ -26,68 +26,49 @@ module "vpc" {
   enable_flow_log = false
 }
 
-module "frontend-cluster" {
-  source  = "terraform-aws-modules/ecs/aws"
-  version = "5.12.1"
+resource "aws_security_group" "postgres_sg" {
+  name        = "exampledeployment-todo-postgres-sg"
+  description = "Security group for PostgreSQL RDS instance"
+  vpc_id      = module.vpc.vpc_id
 
-  cluster_name = "exampledeployment-todo-frontend-cluster"
-  fargate_capacity_providers = {
-    FARGATE = {
-      default_capacity_provider_strategy = {
-        weight = 50
-      }
-    }
-    FARGATE_SPOT = {
-      default_capacity_provider_strategy = {
-        weight = 50
-      }
-    }
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]
   }
-
-  services = {
-    todo-frontend = {
-      cpu    = 256
-      memory = 512
-
-      volume = {
-        tmp = {}
-      }
-      container_definitions = {
-        frontend = {
-          image = "ghcr.io/tram-de/todo-frontend:latest"
-          repositoryCredentials = {
-            credentialsParameter = "arn:aws:secretsmanager:eu-central-1:239339588929:secret:ghcr/-zPVrbg"
-          }
-          essential                 = true
-          cpu                       = 256
-          memory                    = 512
-          enable_cloudwatch_logging = true
-          portMappings = [
-            {
-              name          = "todo-frontend"
-              containerPort = 3000
-              hostPort      = 80
-              protocol      = "tcp"
-            }
-          ]
-          mountPoints = [
-            {
-              sourceVolume  = "tmp"
-              containerPath = "/tmp"
-              readOnly      = false
-            }
-          ]
-          readonly_root_filesystem = false
-        }
-      }
-      assign_public_ip = true
-      subnet_ids       = module.vpc.public_subnets
-    }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["10.0.0.0/16"]
   }
-  create_cloudwatch_log_group = false
-  task_exec_secret_arns       = [
-    var.ghcr_pat_aws_secretsmanager_arn
-  ]
 }
 
-  
+resource "aws_db_subnet_group" "postgres" {
+  name       = "exampledeployment-todo-postgres-subnet-group"
+  subnet_ids = module.vpc.database_subnets
+
+  tags = {
+    Name = "exampledeployment-todo-postgres-subnet-group"
+  }
+}
+
+resource "aws_db_instance" "postgres" {
+  identifier             = "exampledeployment-todo-postgres"
+  engine                 = "postgres"
+  engine_version         = "15.8"
+  instance_class         = "db.t3.micro"
+  allocated_storage      = 20 # Minimum 20 for PostgreSQL
+  db_name                = var.postgres_db_name
+  username               = var.postgres_db_username
+  password               = var.postgres_db_password
+  db_subnet_group_name   = aws_db_subnet_group.postgres.name
+  vpc_security_group_ids = [aws_security_group.postgres_sg.id]
+  skip_final_snapshot    = true
+  storage_encrypted      = true
+
+  tags = {
+    Name = "exampledeployment-todo-postgres"
+  }
+}
