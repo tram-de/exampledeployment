@@ -27,7 +27,8 @@ FROM nginx:1.28-bookworm
 # copy built assets from build stage
 COPY --from=build /app/build /usr/share/nginx/html
 # add default nginx.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf 
+COPY default.conf /etc/nginx/conf.d/default.conf 
+COPY nginx.conf /etc/nginx/conf.d/nginx.conf
 
 # expose frontend app over port 3000
 EXPOSE 3000
